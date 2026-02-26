@@ -1,18 +1,958 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moje Aplikace</title>
-    <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; }
-        .btn { background: #008577; color: white; padding: 15px 25px; text-decoration: none; border-radius: 5px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JS-Software — Vývoj mobilních aplikací</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #080c12;
+    --bg2:       #0d1320;
+    --bg3:       #111827;
+    --surface:   #161d2e;
+    --border:    rgba(255,255,255,0.07);
+    --accent:    #3b82f6;
+    --accent2:   #60a5fa;
+    --accent-glow: rgba(59,130,246,0.18);
+    --text:      #f0f4ff;
+    --muted:     #8494ae;
+    --radius:    14px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* ── Noise overlay ─────────────────────────── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: .4;
+  }
+
+  /* ── NAV ──────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 68px;
+    background: rgba(8,12,18,0.75);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: -.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex; gap: 2.2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: .9rem;
+    font-weight: 500;
+    letter-spacing: .01em;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #fff !important;
+    padding: .45em 1.1em;
+    border-radius: 8px;
+    font-weight: 500 !important;
+  }
+  .nav-cta:hover { background: var(--accent2) !important; color: #fff !important; }
+
+  /* ── HERO ─────────────────────────────────── */
+  #uvod {
+    position: relative;
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 0 5%;
+    overflow: hidden;
+  }
+
+  /* Velký světelný blob */
+  .hero-blob {
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59,130,246,0.22) 0%, transparent 70%);
+    top: -120px; right: -100px;
+    pointer-events: none;
+    animation: blobFloat 8s ease-in-out infinite alternate;
+  }
+  .hero-blob2 {
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
+    bottom: 80px; left: 5%;
+    pointer-events: none;
+    animation: blobFloat 11s ease-in-out infinite alternate-reverse;
+  }
+
+  @keyframes blobFloat {
+    from { transform: translateY(0) scale(1); }
+    to   { transform: translateY(40px) scale(1.05); }
+  }
+
+  .hero-content {
+    position: relative; z-index: 1;
+    max-width: 700px;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .5em;
+    background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.3);
+    color: var(--accent2);
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .35em 1em;
+    border-radius: 100px;
+    margin-bottom: 1.6rem;
+    animation: fadeUp .6s ease both;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: .5; transform: scale(1.4); }
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.6rem, 6vw, 5rem);
+    line-height: 1.05;
+    letter-spacing: -.03em;
+    margin-bottom: 1.4rem;
+    animation: fadeUp .7s .1s ease both;
+  }
+  h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent) 0%, #818cf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 2.4rem;
+    font-weight: 300;
+    animation: fadeUp .7s .2s ease both;
+  }
+
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeUp .7s .3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    padding: .75em 1.8em;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: .95rem;
+    text-decoration: none;
+    transition: all .2s;
+    box-shadow: 0 0 0 0 rgba(59,130,246,.5);
+  }
+  .btn-primary:hover {
+    background: var(--accent2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(59,130,246,.35);
+  }
+
+  .btn-ghost {
+    color: var(--muted);
+    padding: .75em 1.8em;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: .95rem;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: all .2s;
+  }
+  .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,.2); background: rgba(255,255,255,.04); }
+
+  /* Floating phone mockup */
+  .hero-visual {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    animation: fadeUp .8s .2s ease both, floatY 6s ease-in-out infinite;
+  }
+  @keyframes floatY {
+    0%, 100% { transform: translateY(-50%) translateY(0); }
+    50%       { transform: translateY(-50%) translateY(-18px); }
+  }
+
+  .phone-frame {
+    width: 240px;
+    background: var(--surface);
+    border-radius: 36px;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    padding: 14px;
+    box-shadow:
+      0 60px 120px rgba(0,0,0,.7),
+      0 0 0 1px rgba(255,255,255,.04),
+      inset 0 1px 0 rgba(255,255,255,.08);
+    position: relative;
+  }
+  .phone-notch {
+    width: 70px; height: 22px;
+    background: var(--bg);
+    border-radius: 0 0 14px 14px;
+    margin: 0 auto 10px;
+  }
+  .phone-screen {
+    background: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
+    border-radius: 24px;
+    height: 380px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    padding: 16px;
+    gap: 10px;
+  }
+  .ps-bar { height: 8px; border-radius: 4px; background: rgba(255,255,255,.08); }
+  .ps-bar.accent { background: linear-gradient(90deg, var(--accent), #818cf8); width: 60%; }
+  .ps-bar.short { width: 40%; }
+  .ps-card {
+    background: rgba(255,255,255,.05);
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,.06);
+  }
+  .ps-card-dot { width: 28px; height: 28px; border-radius: 8px; background: rgba(59,130,246,.3); margin-bottom: 8px; }
+  .ps-line { height: 6px; border-radius: 3px; background: rgba(255,255,255,.1); margin-bottom: 6px; }
+  .ps-line.w70 { width: 70%; }
+  .ps-line.w50 { width: 50%; }
+  .ps-stat {
+    display: flex; gap: 8px; margin-top: 4px;
+  }
+  .ps-stat span {
+    flex: 1;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(255,255,255,.05);
+  }
+  .ps-stat span:first-child { background: rgba(59,130,246,.2); }
+
+  /* Glow pod telefonem */
+  .phone-glow {
+    position: absolute;
+    bottom: -40px; left: 50%;
+    transform: translateX(-50%);
+    width: 160px; height: 60px;
+    background: rgba(59,130,246,.35);
+    filter: blur(30px);
+    border-radius: 50%;
+  }
+
+  /* ── STATS BAR ────────────────────────────── */
+  .stats-bar {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 5%;
+    display: flex; justify-content: center; gap: 0;
+  }
+  .stat-item {
+    flex: 1; max-width: 220px;
+    text-align: center;
+    padding: 0 2rem;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--accent2);
+    letter-spacing: -.03em;
+    line-height: 1;
+    margin-bottom: .3rem;
+  }
+  .stat-label {
+    font-size: .82rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    font-weight: 500;
+  }
+
+  /* ── SECTIONS ─────────────────────────────── */
+  section { padding: 7rem 5%; position: relative; }
+
+  .section-tag {
+    display: inline-block;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    letter-spacing: -.025em;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  .section-sub {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 480px;
+    font-weight: 300;
+    margin-bottom: 3.5rem;
+  }
+
+  /* ── PORTFOLIO ────────────────────────────── */
+  #portfolio { background: var(--bg2); }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: transform .25s, box-shadow .25s, border-color .25s;
+    cursor: default;
+  }
+  .project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(59,130,246,.2);
+    border-color: rgba(59,130,246,.25);
+  }
+
+  .project-thumb {
+    height: 180px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .project-thumb::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 50%, var(--surface) 100%);
+  }
+
+  .pt-blue  { background: linear-gradient(135deg, #0d1f3c 0%, #1e3a6e 100%); }
+  .pt-purple{ background: linear-gradient(135deg, #1a0d3c 0%, #3b1e6e 100%); }
+  .pt-green { background: linear-gradient(135deg, #0d2a1a 0%, #1e6e3a 100%); }
+  .pt-orange{ background: linear-gradient(135deg, #2a1a0d 0%, #6e3b1e 100%); }
+
+  .project-body {
+    padding: 1.4rem;
+  }
+  .project-tags {
+    display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .8rem;
+  }
+  .tag {
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    background: rgba(59,130,246,.12);
+    color: var(--accent2);
+    padding: .25em .7em;
+    border-radius: 4px;
+    border: 1px solid rgba(59,130,246,.2);
+  }
+  .project-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: .5rem;
+  }
+  .project-desc {
+    font-size: .88rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  /* ── O NÁS ────────────────────────────────── */
+  #o-nas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .about-text { }
+  .about-text p {
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+    font-weight: 300;
+    font-size: 1.02rem;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .skill-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: .8rem 1rem;
+    display: flex; align-items: center; gap: .7rem;
+    font-size: .9rem;
+    font-weight: 500;
+    transition: border-color .2s;
+  }
+  .skill-pill:hover { border-color: rgba(59,130,246,.3); }
+  .skill-icon {
+    width: 32px; height: 32px;
+    background: rgba(59,130,246,.15);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .about-visual {
+    position: relative;
+  }
+  .about-card-stack {
+    position: relative;
+    height: 380px;
+  }
+  .about-card {
+    position: absolute;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.5rem;
+  }
+  .about-card.c1 {
+    width: 260px;
+    top: 0; left: 0;
+    transform: rotate(-3deg);
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  }
+  .about-card.c2 {
+    width: 240px;
+    bottom: 0; right: 0;
+    transform: rotate(2deg);
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    border-color: rgba(59,130,246,.25);
+  }
+  .card-label {
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .8rem;
+  }
+  .card-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--accent2);
+    letter-spacing: -.04em;
+    line-height: 1;
+  }
+  .card-desc { font-size: .85rem; color: var(--muted); margin-top: .4rem; }
+
+  .about-glow {
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59,130,246,.15) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  /* ── KONTAKT ──────────────────────────────── */
+  #kontakt { background: var(--bg2); }
+
+  .contact-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .contact-info h2 { margin-bottom: 1rem; }
+  .contact-info p { color: var(--muted); margin-bottom: 2rem; font-weight: 300; }
+
+  .contact-detail {
+    display: flex; flex-direction: column; gap: 1.2rem;
+  }
+  .contact-item {
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .contact-icon {
+    width: 44px; height: 44px;
+    background: rgba(59,130,246,.12);
+    border: 1px solid rgba(59,130,246,.2);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .contact-item-text { font-size: .9rem; }
+  .contact-item-text strong { display: block; font-weight: 600; margin-bottom: .1rem; }
+  .contact-item-text span { color: var(--muted); font-size: .85rem; }
+
+  /* Form */
+  .contact-form {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 2.2rem;
+  }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .form-group {
+    display: flex; flex-direction: column; gap: .4rem;
+    margin-bottom: 1.1rem;
+  }
+  .form-group label {
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .75rem 1rem;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    width: 100%;
+    -webkit-appearance: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+  }
+  .form-group textarea { resize: vertical; min-height: 110px; }
+
+  .form-submit {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: .85em;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+    margin-top: .5rem;
+    display: flex; align-items: center; justify-content: center; gap: .6rem;
+  }
+  .form-submit:hover {
+    background: var(--accent2);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(59,130,246,.35);
+  }
+
+  /* ── FOOTER ───────────────────────────────── */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  footer .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--muted);
+  }
+  footer .logo span { color: var(--accent); }
+  footer small { color: var(--muted); font-size: .82rem; }
+  footer nav-links { gap: 1.5rem; }
+
+  /* ── ANIMATIONS ───────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .65s ease, transform .65s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── MOBILE ───────────────────────────────── */
+  @media (max-width: 900px) {
+    .hero-visual { display: none; }
+    #o-nas { grid-template-columns: 1fr; }
+    .contact-wrap { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .stats-bar { flex-wrap: wrap; }
+    .stat-item { flex: 0 0 50%; border-right: none; border-bottom: 1px solid var(--border); padding: 1rem; }
+  }
+
+  /* ── TOAST ────────────────────────────────── */
+  .toast {
+    position: fixed; bottom: 2rem; right: 2rem;
+    background: var(--surface);
+    border: 1px solid rgba(59,130,246,.3);
+    color: var(--text);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-size: .9rem;
+    font-weight: 500;
+    box-shadow: 0 20px 50px rgba(0,0,0,.5);
+    transform: translateY(80px); opacity: 0;
+    transition: all .35s cubic-bezier(.34,1.56,.64,1);
+    z-index: 999;
+    display: flex; align-items: center; gap: .6rem;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast::before { content: '✓'; color: #4ade80; font-weight: 700; font-size: 1rem; }
+</style>
 </head>
 <body>
-    <h1>Vítejte na webu mé aplikace</h1>
-    <p>Moje super aplikace je již brzy dostupná v Google Play.</p>
-    <br><br>
-    <a href="#" class="btn">Stáhnout z Google Play</a>
+
+<!-- NAV -->
+<nav>
+  <a href="#uvod" class="nav-logo">JS<span>-</span>Software</a>
+  <ul class="nav-links">
+    <li><a href="#uvod">Úvod</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#o-nas">O nás</a></li>
+    <li><a href="#kontakt" class="nav-cta">Kontakt</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="uvod">
+  <div class="hero-blob"></div>
+  <div class="hero-blob2"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">Vývoj mobilních aplikací</div>
+    <h1>Aplikace, které<br><em>skutečně fungují</em></h1>
+    <p class="hero-sub">Navrhujeme a vyvíjíme nativní mobilní aplikace pro Android i iOS. Čistý kód, rychlé dodání, výsledky které vidíte.</p>
+    <div class="hero-actions">
+      <a href="#portfolio" class="btn-primary">Naše práce</a>
+      <a href="#kontakt" class="btn-ghost">Napište nám</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="ps-bar accent"></div>
+        <div class="ps-bar short" style="opacity:.5"></div>
+        <div style="height:12px"></div>
+        <div class="ps-card">
+          <div class="ps-card-dot"></div>
+          <div class="ps-line w70"></div>
+          <div class="ps-line w50"></div>
+          <div class="ps-stat"><span></span><span></span><span></span></div>
+        </div>
+        <div class="ps-card">
+          <div class="ps-card-dot" style="background:rgba(129,140,248,.3)"></div>
+          <div class="ps-line w70"></div>
+          <div class="ps-line w50"></div>
+        </div>
+        <div class="ps-card">
+          <div class="ps-line" style="width:85%"></div>
+          <div class="ps-line w50"></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-glow"></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item reveal">
+    <div class="stat-number">40+</div>
+    <div class="stat-label">Dokončených aplikací</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-number">8+</div>
+    <div class="stat-label">Let zkušeností</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-number">98%</div>
+    <div class="stat-label">Spokojených klientů</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-number">24/7</div>
+    <div class="stat-label">Podpora po nasazení</div>
+  </div>
+</div>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="reveal">
+    <div class="section-tag">Portfolio</div>
+    <h2>Vybrané projekty</h2>
+    <p class="section-sub">Každá aplikace je výsledkem úzké spolupráce s klientem a precizního technického zpracování.</p>
+  </div>
+
+  <div class="portfolio-grid">
+    <div class="project-card reveal">
+      <div class="project-thumb pt-blue">📧</div>
+      <div class="project-body">
+        <div class="project-tags"><span class="tag">Android</span><span class="tag">Kotlin</span></div>
+        <div class="project-name">Tchiki Mail</div>
+        <p class="project-desc">Nativní Android emailový klient s podporou IMAP/POP3, správou více účtů a šifrováním hesel přes Android Keystore.</p>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-thumb pt-purple">🛒</div>
+      <div class="project-body">
+        <div class="project-tags"><span class="tag">Android</span><span class="tag">Compose</span></div>
+        <div class="project-name">ShopFlow</div>
+        <p class="project-desc">Mobilní e-commerce aplikace s real-time synchronizací skladových zásob a integrací platební brány.</p>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-thumb pt-green">🏃</div>
+      <div class="project-body">
+        <div class="project-tags"><span class="tag">iOS</span><span class="tag">Android</span></div>
+        <div class="project-name">FitTrack Pro</div>
+        <p class="project-desc">Cross-platform aplikace pro sledování fitness aktivit s wearables integrací a AI personalizovanými plány.</p>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-thumb pt-orange">🚚</div>
+      <div class="project-body">
+        <div class="project-tags"><span class="tag">Android</span><span class="tag">API</span></div>
+        <div class="project-name">LogiScan</div>
+        <p class="project-desc">Logistická aplikace pro řidiče s offline mapami, skenováním čárových kódů a GPS sledováním zásilek.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- O NÁS -->
+<section id="o-nas">
+  <div class="about-text reveal">
+    <div class="section-tag">O nás</div>
+    <h2>Malý tým,<br>velké výsledky</h2>
+    <p>JS-Software je česká softwarová firma specializující se na vývoj mobilních aplikací na míru. Pracujeme rychle, komunikujeme otevřeně a dodáváme přesně to, co slíbíme.</p>
+    <p>Zakládáme si na čistém kódu, moderních technologiích a dlouhodobých vztazích s klienty. Každý projekt přistupujeme jako k vlastnímu produktu.</p>
+
+    <div class="skills-grid">
+      <div class="skill-pill"><div class="skill-icon">🤖</div>Android (Kotlin)</div>
+      <div class="skill-pill"><div class="skill-icon">🍎</div>iOS (Swift)</div>
+      <div class="skill-pill"><div class="skill-icon">⚡</div>Jetpack Compose</div>
+      <div class="skill-pill"><div class="skill-icon">🔒</div>Bezpečnost dat</div>
+      <div class="skill-pill"><div class="skill-icon">☁️</div>API integrace</div>
+      <div class="skill-pill"><div class="skill-icon">🚀</div>CI/CD nasazení</div>
+    </div>
+  </div>
+
+  <div class="about-visual reveal">
+    <div class="about-glow"></div>
+    <div class="about-card-stack">
+      <div class="about-card c1">
+        <div class="card-label">Průměrná doba dodání</div>
+        <div class="card-number">6<span style="font-size:1.5rem;color:var(--muted)"> týdnů</span></div>
+        <div class="card-desc">Od zadání po spuštění v produkci</div>
+      </div>
+      <div class="about-card c2">
+        <div class="card-label">Hodnocení na App Store</div>
+        <div class="card-number">4.8<span style="font-size:1.5rem;color:var(--muted)"> ★</span></div>
+        <div class="card-desc">Průměr přes všechny dodané projekty</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt">
+  <div class="contact-wrap">
+    <div class="contact-info reveal">
+      <div class="section-tag">Kontakt</div>
+      <h2>Pojďme spolupracovat</h2>
+      <p>Máte nápad na aplikaci nebo chcete rozvíjet stávající produkt? Napište nám — odpovídáme do 24 hodin.</p>
+      <div class="contact-detail">
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div class="contact-item-text">
+            <strong>Email</strong>
+            <span>info@js-software.cz</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div class="contact-item-text">
+            <strong>Telefon</strong>
+            <span>+420 777 000 000</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div class="contact-item-text">
+            <strong>Sídlo</strong>
+            <span>Česká republika</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form reveal">
+      <form id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Jméno</label>
+            <input type="text" placeholder="Jan Novák" required>
+          </div>
+          <div class="form-group">
+            <label>E-mail</label>
+            <input type="email" placeholder="jan@firma.cz" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Typ projektu</label>
+          <select>
+            <option value="">Vyberte...</option>
+            <option>Nová Android aplikace</option>
+            <option>Nová iOS aplikace</option>
+            <option>Rozšíření stávající aplikace</option>
+            <option>Konzultace</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Zpráva</label>
+          <textarea placeholder="Popište váš projekt nebo otázku..." required></textarea>
+        </div>
+        <button type="submit" class="form-submit">
+          Odeslat zprávu
+          <span>→</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">JS<span>-</span>Software</div>
+  <small>© 2025 JS-Software. Všechna práva vyhrazena.</small>
+  <ul class="nav-links" style="display:flex;gap:1.5rem;list-style:none">
+    <li><a href="#uvod" style="color:var(--muted);text-decoration:none;font-size:.85rem">Úvod</a></li>
+    <li><a href="#portfolio" style="color:var(--muted);text-decoration:none;font-size:.85rem">Portfolio</a></li>
+    <li><a href="#o-nas" style="color:var(--muted);text-decoration:none;font-size:.85rem">O nás</a></li>
+    <li><a href="#kontakt" style="color:var(--muted);text-decoration:none;font-size:.85rem">Kontakt</a></li>
+  </ul>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">Zpráva odeslána! Ozve se vám do 24 hodin.</div>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Form submit
+  document.getElementById('contactForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    e.target.reset();
+    setTimeout(() => toast.classList.remove('show'), 4000);
+  });
+
+  // Nav active state on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY + 100;
+    sections.forEach(s => {
+      if (y >= s.offsetTop && y < s.offsetTop + s.offsetHeight) {
+        navLinks.forEach(a => a.style.color = '');
+        const active = document.querySelector(`.nav-links a[href="#${s.id}"]`);
+        if (active && !active.classList.contains('nav-cta')) active.style.color = 'var(--text)';
+      }
+    });
+  });
+</script>
 </body>
 </html>

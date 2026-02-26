@@ -861,8 +861,8 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
 
   <div class="hero-content">
     <div class="hero-eyebrow" data-cs="Vývoj mobilních aplikací pro Android" data-en="Android Mobile App Development">Vývoj mobilních aplikací pro Android</div>
-    <h1>Aplikace,&nbsp;které
-      <span class="line2" data-cs="skutečně fungují" data-en="that truly work">skutečně fungují</span>
+    <h1 id="hero-h1">Aplikace,&nbsp;které
+      <span class="line2">skutečně fungují</span>
     </h1>
     <p class="hero-desc" data-cs="Navrhujeme a vyvíjíme nativní Android aplikace na míru. Čistý kód, rychlé dodání, výsledky které vidíte." data-en="We design and develop custom native Android applications. Clean code, fast delivery, results you can see.">Navrhujeme a vyvíjíme nativní Android aplikace na míru. Čistý kód, rychlé dodání, výsledky které vidíte.</p>
     <div class="hero-btns">
@@ -1111,10 +1111,24 @@ function setLang(lang) {
   document.documentElement.lang = lang;
   document.title = lang === 'en' ? 'JS-Software — Android App Development' : 'JS-Software — Vývoj mobilních aplikací';
 
+  // Hero h1 - special handling because it contains a span
+  const heroH1 = document.getElementById('hero-h1');
+  if (heroH1) {
+    if (lang === 'en') {
+      heroH1.innerHTML = 'Apps\u00a0that\n      <span class="line2">truly work</span>';
+    } else {
+      heroH1.innerHTML = 'Aplikace,\u00a0kter\u00e9\n      <span class="line2">skute\u010dn\u011b funguj\u00ed</span>';
+    }
+  }
+
   document.querySelectorAll('[data-cs],[data-en]').forEach(el => {
     const val = el.getAttribute('data-' + lang);
     if (val === null) return;
-    if (val.includes('<br>')) { el.innerHTML = val; } else { el.textContent = val; }
+    if (val.includes('<br>')) {
+      el.innerHTML = val;
+    } else {
+      el.textContent = val;
+    }
   });
 
   document.querySelectorAll('[data-placeholder-cs],[data-placeholder-en]').forEach(el => {

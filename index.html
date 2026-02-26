@@ -1008,7 +1008,7 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
         <div class="contact-items">
           <div class="c-item">
             <div class="c-icon">@</div>
-            <div class="c-text"><strong>Email</strong><span>js-software@post.cz</span></div>
+            <div class="c-text"><strong>Email</strong><span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="38524b154b575e4c4f594a5d7848574b4c165b42">[email&#160;protected]</a></span></div>
           </div>
           <div class="c-item">
             <div class="c-icon">#</div>
@@ -1021,21 +1021,21 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
         </div>
       </div>
       <div class="contact-form reveal">
-        <form id="contactForm">
+        <form id="contactForm" action="https://formspree.io/f/mreajlvv" method="POST">
           <div class="form-row">
-            <div class="fg"><label>Jméno</label><input type="text" placeholder="Jan Novák" required></div>
-            <div class="fg"><label>E-mail</label><input type="email" placeholder="jan@firma.cz" required></div>
+            <div class="fg"><label>Jméno</label><input type="text" name="jmeno" placeholder="Jan Novák" required></div>
+            <div class="fg"><label>E-mail</label><input type="email" name="email" placeholder="jan@firma.cz" required></div>
           </div>
           <div class="fg">
             <label>Typ projektu</label>
-            <select>
+            <select name="typ_projektu">
               <option value="">Vyberte...</option>
               <option>Nová Android aplikace</option>
               <option>Rozšíření stávající aplikace</option>
               <option>Konzultace</option>
             </select>
           </div>
-          <div class="fg"><label>Zpráva</label><textarea placeholder="Popište váš projekt..." required></textarea></div>
+          <div class="fg"><label>Zpráva</label><textarea name="zprava" placeholder="Popište váš projekt..." required></textarea></div>
           <button type="submit" class="btn-submit">Odeslat zprávu</button>
         </form>
       </div>
@@ -1057,18 +1057,41 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
 
 <div class="toast" id="toast">Zpráva odeslána! Ozveme se do 24 hodin.</div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const obs = new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
 },{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-document.getElementById('contactForm').addEventListener('submit',e=>{
+document.getElementById('contactForm').addEventListener('submit', async e => {
   e.preventDefault();
-  const t=document.getElementById('toast');
+  const form = e.target;
+  const btn = form.querySelector('.btn-submit');
+  btn.disabled = true;
+  btn.textContent = 'Odesílám...';
+  const t = document.getElementById('toast');
+  try {
+    const res = await fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      t.textContent = '✓ Zpráva odeslána! Ozveme se do 24 hodin.';
+      t.style.background = '#00c896';
+      form.reset();
+    } else {
+      t.textContent = '✗ Chyba při odesílání. Zkuste to znovu.';
+      t.style.background = '#e05555';
+    }
+  } catch {
+    t.textContent = '✗ Síťová chyba. Zkontrolujte připojení.';
+    t.style.background = '#e05555';
+  }
   t.classList.add('show');
-  e.target.reset();
-  setTimeout(()=>t.classList.remove('show'),4000);
+  btn.disabled = false;
+  btn.textContent = 'Odeslat zprávu';
+  setTimeout(() => { t.classList.remove('show'); t.style.background = ''; }, 4000);
 });
 
 // Nav highlight
@@ -1076,12 +1099,4 @@ const secs=document.querySelectorAll('section[id]');
 window.addEventListener('scroll',()=>{
   const y=window.scrollY+80;
   secs.forEach(s=>{
-    const a=document.querySelector(`.nav-links a[href="#${s.id}"]`);
-    if(a&&!a.classList.contains('nav-cta')){
-      a.style.color=y>=s.offsetTop&&y<s.offsetTop+s.offsetHeight?'var(--text)':'';
-    }
-  });
-});
-</script>
-</body>
-</html>
+    cons

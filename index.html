@@ -782,18 +782,58 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
   .hero-orbit,.hero-orbit2,.hero-code-bg{display:none;}
   .hero-stats{flex-wrap:wrap;gap:1.5rem;}
 }
+
+/* ═══ LANGUAGE SWITCHER ═══ */
+.lang-switcher {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 200;
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+}
+.lang-btn {
+  padding: .45rem .9rem;
+  font-family: var(--mono);
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color .2s, background .2s;
+}
+.lang-btn.active {
+  color: var(--bg);
+  background: var(--accent);
+}
+.lang-btn:hover:not(.active) {
+  color: var(--text);
+}
+[lang-show] { display: none; }
 </style>
 </head>
 <body>
+
+<!-- LANGUAGE SWITCHER -->
+<div class="lang-switcher" id="langSwitcher">
+  <button class="lang-btn" id="btnCS" onclick="setLang('cs')">CZ</button>
+  <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
+</div>
 
 <!-- NAV -->
 <nav>
   <a href="#uvod" class="nav-logo">JS<span>-</span>Software</a>
   <ul class="nav-links">
-    <li><a href="#services">Služby</a></li>
+    <li><a href="#services"><span lang-show="cs">Služby</span><span lang-show="en">Services</span></a></li>
     <li><a href="#portfolio">Portfolio</a></li>
-    <li><a href="#o-nas">O nás</a></li>
-    <li><a href="#kontakt" class="nav-cta">Kontakt</a></li>
+    <li><a href="#o-nas"><span lang-show="cs">O nás</span><span lang-show="en">About</span></a></li>
+    <li><a href="#kontakt" class="nav-cta"><span lang-show="cs">Kontakt</span><span lang-show="en">Contact</span></a></li>
   </ul>
 </nav>
 
@@ -818,20 +858,33 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
 11001010 10001011</div>
 
   <div class="hero-content">
-    <div class="hero-eyebrow">Vývoj mobilních aplikací pro Android</div>
-    <h1>Aplikace,&nbsp;které
-      <span class="line2">skutečně fungují</span>
+    <div class="hero-eyebrow">
+      <span lang-show="cs">Vývoj mobilních aplikací pro Android</span>
+      <span lang-show="en">Android Mobile App Development</span>
+    </div>
+    <h1>
+      <span lang-show="cs">Aplikace,&nbsp;které<span class="line2">skutečně fungují</span></span>
+      <span lang-show="en">Apps&nbsp;that<span class="line2">actually work</span></span>
     </h1>
-    <p class="hero-desc">Navrhujeme a vyvíjíme nativní Android aplikace na míru. Čistý kód, rychlé dodání, výsledky které vidíte.</p>
+    <p class="hero-desc">
+      <span lang-show="cs">Navrhujeme a vyvíjíme nativní Android aplikace na míru. Čistý kód, rychlé dodání, výsledky které vidíte.</span>
+      <span lang-show="en">We design and develop custom native Android applications. Clean code, fast delivery, results you can see.</span>
+    </p>
     <div class="hero-btns">
-      <a href="#portfolio" class="btn-primary">Naše práce</a>
-      <a href="#kontakt" class="btn-outline">Napište nám</a>
+      <a href="#portfolio" class="btn-primary">
+        <span lang-show="cs">Naše práce</span>
+        <span lang-show="en">Our Work</span>
+      </a>
+      <a href="#kontakt" class="btn-outline">
+        <span lang-show="cs">Napište nám</span>
+        <span lang-show="en">Get in Touch</span>
+      </a>
     </div>
     <div class="hero-stats">
-      <div class="hs-item"><div class="hs-num">40+</div><div class="hs-label">Aplikací</div></div>
-      <div class="hs-item"><div class="hs-num">8+</div><div class="hs-label">Let zkušeností</div></div>
-      <div class="hs-item"><div class="hs-num">98%</div><div class="hs-label">Spokojených klientů</div></div>
-      <div class="hs-item"><div class="hs-num">24/7</div><div class="hs-label">Podpora</div></div>
+      <div class="hs-item"><div class="hs-num">40+</div><div class="hs-label"><span lang-show="cs">Aplikací</span><span lang-show="en">Apps Built</span></div></div>
+      <div class="hs-item"><div class="hs-num">8+</div><div class="hs-label"><span lang-show="cs">Let zkušeností</span><span lang-show="en">Years Experience</span></div></div>
+      <div class="hs-item"><div class="hs-num">98%</div><div class="hs-label"><span lang-show="cs">Spokojených klientů</span><span lang-show="en">Happy Clients</span></div></div>
+      <div class="hs-item"><div class="hs-num">24/7</div><div class="hs-label"><span lang-show="cs">Podpora</span><span lang-show="en">Support</span></div></div>
     </div>
   </div>
 </section>
@@ -840,46 +893,67 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
 <section id="services">
   <div class="section-inner">
     <div class="reveal">
-      <div class="sec-label">Co děláme</div>
-      <h2>Naše služby</h2>
-      <p class="sec-sub">Pokrýváme celý lifecycle mobilní aplikace — od nápadu po App Store.</p>
+      <div class="sec-label"><span lang-show="cs">Co děláme</span><span lang-show="en">What We Do</span></div>
+      <h2><span lang-show="cs">Naše služby</span><span lang-show="en">Our Services</span></h2>
+      <p class="sec-sub">
+        <span lang-show="cs">Pokrýváme celý lifecycle mobilní aplikace — od nápadu po App Store.</span>
+        <span lang-show="en">We cover the full mobile app lifecycle — from concept to the Play Store.</span>
+      </p>
     </div>
     <div class="services-grid reveal">
       <div class="srv-card">
         <div class="srv-num">01</div>
         <span class="srv-icon">📱</span>
-        <div class="srv-title">Android vývoj</div>
-        <p class="srv-desc">Nativní aplikace v Kotlinu s Jetpack Compose. Čistá architektura, výkon a maintainability jako standard.</p>
+        <div class="srv-title"><span lang-show="cs">Android vývoj</span><span lang-show="en">Android Development</span></div>
+        <p class="srv-desc">
+          <span lang-show="cs">Nativní aplikace v Kotlinu s Jetpack Compose. Čistá architektura, výkon a maintainability jako standard.</span>
+          <span lang-show="en">Native apps in Kotlin with Jetpack Compose. Clean architecture, performance, and maintainability as standard.</span>
+        </p>
       </div>
       <div class="srv-card">
         <div class="srv-num">02</div>
         <span class="srv-icon">🎨</span>
         <div class="srv-title">UI/UX Design</div>
-        <p class="srv-desc">Material Design 3, custom komponenty, animace. Rozhraní které uživatelé milují a nechtějí opustit.</p>
+        <p class="srv-desc">
+          <span lang-show="cs">Material Design 3, custom komponenty, animace. Rozhraní které uživatelé milují a nechtějí opustit.</span>
+          <span lang-show="en">Material Design 3, custom components, animations. Interfaces users love and keep coming back to.</span>
+        </p>
       </div>
       <div class="srv-card">
         <div class="srv-num">03</div>
         <span class="srv-icon">🔗</span>
-        <div class="srv-title">API & Backend integrace</div>
-        <p class="srv-desc">REST, GraphQL, WebSockets. Propojíme vaši aplikaci s jakýmkoli backendovým systémem nebo cloudovou službou.</p>
+        <div class="srv-title"><span lang-show="cs">API & Backend integrace</span><span lang-show="en">API & Backend Integration</span></div>
+        <p class="srv-desc">
+          <span lang-show="cs">REST, GraphQL, WebSockets. Propojíme vaši aplikaci s jakýmkoli backendovým systémem nebo cloudovou službou.</span>
+          <span lang-show="en">REST, GraphQL, WebSockets. We connect your app to any backend system or cloud service.</span>
+        </p>
       </div>
       <div class="srv-card">
         <div class="srv-num">04</div>
         <span class="srv-icon">🔒</span>
-        <div class="srv-title">Bezpečnost dat</div>
-        <p class="srv-desc">Android Keystore, biometrie, šifrování AES-256-GCM. Citlivá data uživatelů jsou v bezpečí.</p>
+        <div class="srv-title"><span lang-show="cs">Bezpečnost dat</span><span lang-show="en">Data Security</span></div>
+        <p class="srv-desc">
+          <span lang-show="cs">Android Keystore, biometrie, šifrování AES-256-GCM. Citlivá data uživatelů jsou v bezpečí.</span>
+          <span lang-show="en">Android Keystore, biometrics, AES-256-GCM encryption. Your users' sensitive data stays safe.</span>
+        </p>
       </div>
       <div class="srv-card">
         <div class="srv-num">05</div>
         <span class="srv-icon">⚡</span>
-        <div class="srv-title">Optimalizace výkonu</div>
-        <p class="srv-desc">Profiling, lazy loading, efektivní správa paměti. Aplikace která letí i na starším hardwaru.</p>
+        <div class="srv-title"><span lang-show="cs">Optimalizace výkonu</span><span lang-show="en">Performance Optimization</span></div>
+        <p class="srv-desc">
+          <span lang-show="cs">Profiling, lazy loading, efektivní správa paměti. Aplikace která letí i na starším hardwaru.</span>
+          <span lang-show="en">Profiling, lazy loading, efficient memory management. Apps that fly even on older hardware.</span>
+        </p>
       </div>
       <div class="srv-card">
         <div class="srv-num">06</div>
         <span class="srv-icon">🛠</span>
-        <div class="srv-title">Údržba & podpora</div>
-        <p class="srv-desc">Aktualizace, bugfixy, monitoring crashů. Jsme tu i po spuštění — ne jen do předání.</p>
+        <div class="srv-title"><span lang-show="cs">Údržba & podpora</span><span lang-show="en">Maintenance & Support</span></div>
+        <p class="srv-desc">
+          <span lang-show="cs">Aktualizace, bugfixy, monitoring crashů. Jsme tu i po spuštění — ne jen do předání.</span>
+          <span lang-show="en">Updates, bugfixes, crash monitoring. We're here after launch — not just until handover.</span>
+        </p>
       </div>
     </div>
   </div>
@@ -889,9 +963,12 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
 <section id="portfolio">
   <div class="section-inner">
     <div class="reveal">
-      <div class="sec-label">Vybrané projekty</div>
-      <h2>Naše práce</h2>
-      <p class="sec-sub">Každá aplikace je výsledkem precizního technického zpracování a úzké spolupráce s klientem.</p>
+      <div class="sec-label"><span lang-show="cs">Vybrané projekty</span><span lang-show="en">Featured Projects</span></div>
+      <h2><span lang-show="cs">Naše práce</span><span lang-show="en">Our Work</span></h2>
+      <p class="sec-sub">
+        <span lang-show="cs">Každá aplikace je výsledkem precizního technického zpracování a úzké spolupráce s klientem.</span>
+        <span lang-show="en">Every app is the result of precise technical craftsmanship and close collaboration with the client.</span>
+      </p>
     </div>
     <div class="portfolio-feature reveal">
       <div class="pf-visual">
@@ -904,30 +981,45 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
           <span class="pf-tag">Jetpack Compose</span>
         </div>
         <div class="pf-title">Tchiki Mail</div>
-        <p class="pf-desc">Nativní Android emailový klient s profesionálními funkcemi a důrazem na soukromí. Postaven na moderní architektuře s offline-first přístupem.</p>
+        <p class="pf-desc">
+          <span lang-show="cs">Nativní Android emailový klient s profesionálními funkcemi a důrazem na soukromí. Postaven na moderní architektuře s offline-first přístupem.</span>
+          <span lang-show="en">A native Android email client with professional features and a strong focus on privacy. Built on modern architecture with an offline-first approach.</span>
+        </p>
         <ul class="pf-features">
-          <li>Správa více IMAP/POP3 účtů najednou</li>
-          <li>Šifrování hesel přes Android Keystore (AES-256-GCM)</li>
-          <li>Automatická synchronizace v pozadí</li>
-          <li>Filtrovací pravidla pro automatické třídění pošty</li>
-          <li>HTML emaily, přílohy, MDN potvrzení</li>
-          <li>Dostupné ve 23 jazycích</li>
+          <li><span lang-show="cs">Správa více IMAP/POP3 účtů najednou</span><span lang-show="en">Manage multiple IMAP/POP3 accounts simultaneously</span></li>
+          <li><span lang-show="cs">Šifrování hesel přes Android Keystore (AES-256-GCM)</span><span lang-show="en">Password encryption via Android Keystore (AES-256-GCM)</span></li>
+          <li><span lang-show="cs">Automatická synchronizace v pozadí</span><span lang-show="en">Automatic background synchronization</span></li>
+          <li><span lang-show="cs">Filtrovací pravidla pro automatické třídění pošty</span><span lang-show="en">Filter rules for automatic mail sorting</span></li>
+          <li><span lang-show="cs">HTML emaily, přílohy, MDN potvrzení</span><span lang-show="en">HTML emails, attachments, MDN read receipts</span></li>
+          <li><span lang-show="cs">Dostupné ve 23 jazycích</span><span lang-show="en">Available in 23 languages</span></li>
         </ul>
-        <a href="#kontakt" class="pf-link">Zjistit více →</a>
+        <a href="#kontakt" class="pf-link">
+          <span lang-show="cs">Zjistit více →</span>
+          <span lang-show="en">Learn more →</span>
+        </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- O NÁS -->
+<!-- O NÁS / ABOUT -->
 <section id="o-nas">
   <div class="section-inner">
     <div class="about-grid">
       <div class="about-text reveal">
-        <div class="sec-label">O nás</div>
-        <h2>Malý tým,<br>velké výsledky</h2>
-        <p>JS-Software je česká softwarová firma specializující se na vývoj Android aplikací na míru. Pracujeme rychle, komunikujeme otevřeně a dodáváme přesně to, co slíbíme.</p>
-        <p>Zakládáme si na čistém kódu, moderních technologiích a dlouhodobých vztazích s klienty. Každý projekt přistupujeme jako k vlastnímu produktu.</p>
+        <div class="sec-label"><span lang-show="cs">O nás</span><span lang-show="en">About Us</span></div>
+        <h2>
+          <span lang-show="cs">Malý tým,<br>velké výsledky</span>
+          <span lang-show="en">Small team,<br>big results</span>
+        </h2>
+        <p>
+          <span lang-show="cs">JS-Software je česká softwarová firma specializující se na vývoj Android aplikací na míru. Pracujeme rychle, komunikujeme otevřeně a dodáváme přesně to, co slíbíme.</span>
+          <span lang-show="en">JS-Software is a Czech software company specializing in custom Android app development. We work fast, communicate openly, and deliver exactly what we promise.</span>
+        </p>
+        <p>
+          <span lang-show="cs">Zakládáme si na čistém kódu, moderních technologiích a dlouhodobých vztazích s klienty. Každý projekt přistupujeme jako k vlastnímu produktu.</span>
+          <span lang-show="en">We're committed to clean code, modern technologies, and long-term client relationships. We approach every project as if it were our own product.</span>
+        </p>
         <div class="tech-stack">
           <div class="tech-item"><div class="tech-dot"></div>Kotlin</div>
           <div class="tech-item"><div class="tech-dot"></div>Jetpack Compose</div>
@@ -969,54 +1061,75 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
 <section id="process">
   <div class="section-inner">
     <div class="reveal" style="text-align:center;max-width:500px;margin:0 auto 4rem;">
-      <div class="sec-label" style="justify-content:center;">Jak pracujeme</div>
-      <h2>Proces vývoje</h2>
+      <div class="sec-label" style="justify-content:center;">
+        <span lang-show="cs">Jak pracujeme</span>
+        <span lang-show="en">How We Work</span>
+      </div>
+      <h2><span lang-show="cs">Proces vývoje</span><span lang-show="en">Development Process</span></h2>
     </div>
     <div class="process-steps">
       <div class="step reveal">
         <div class="step-num">01</div>
         <div class="step-title">Discovery</div>
-        <p class="step-desc">Analýza požadavků, definice rozsahu, technická architektura a odhad nákladů.</p>
+        <p class="step-desc">
+          <span lang-show="cs">Analýza požadavků, definice rozsahu, technická architektura a odhad nákladů.</span>
+          <span lang-show="en">Requirements analysis, scope definition, technical architecture, and cost estimation.</span>
+        </p>
       </div>
       <div class="step reveal">
         <div class="step-num">02</div>
         <div class="step-title">Design</div>
-        <p class="step-desc">Wireframes, UI/UX prototypy, user testing. Design schválený klientem před vývojem.</p>
+        <p class="step-desc">
+          <span lang-show="cs">Wireframes, UI/UX prototypy, user testing. Design schválený klientem před vývojem.</span>
+          <span lang-show="en">Wireframes, UI/UX prototypes, user testing. Client-approved design before development begins.</span>
+        </p>
       </div>
       <div class="step reveal">
         <div class="step-num">03</div>
-        <div class="step-title">Vývoj</div>
-        <p class="step-desc">Agilní sprinty, průběžné demo, code review a automatické testy v každém kroku.</p>
+        <div class="step-title"><span lang-show="cs">Vývoj</span><span lang-show="en">Development</span></div>
+        <p class="step-desc">
+          <span lang-show="cs">Agilní sprinty, průběžné demo, code review a automatické testy v každém kroku.</span>
+          <span lang-show="en">Agile sprints, continuous demos, code review, and automated tests at every step.</span>
+        </p>
       </div>
       <div class="step reveal">
         <div class="step-num">04</div>
         <div class="step-title">Launch & Support</div>
-        <p class="step-desc">Nasazení na Play Store, monitoring, rychlý bugfix SLA a průběžné aktualizace.</p>
+        <p class="step-desc">
+          <span lang-show="cs">Nasazení na Play Store, monitoring, rychlý bugfix SLA a průběžné aktualizace.</span>
+          <span lang-show="en">Play Store deployment, monitoring, fast bugfix SLA, and ongoing updates.</span>
+        </p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- KONTAKT -->
+<!-- KONTAKT / CONTACT -->
 <section id="kontakt">
   <div class="section-inner">
     <div class="contact-grid">
       <div class="reveal">
-        <div class="sec-label">Kontakt</div>
-        <h2>Pojďme<br>spolupracovat</h2>
-        <p>Máte nápad na aplikaci? Napište nám — odpovídáme do 24 hodin.</p>
+        <div class="sec-label"><span lang-show="cs">Kontakt</span><span lang-show="en">Contact</span></div>
+        <h2>
+          <span lang-show="cs">Pojďme<br>spolupracovat</span>
+          <span lang-show="en">Let's work<br>together</span>
+        </h2>
+        <p>
+          <span lang-show="cs">Máte nápad na aplikaci? Napište nám — odpovídáme do 24 hodin.</span>
+          <span lang-show="en">Have an app idea? Write to us — we respond within 24 hours.</span>
+        </p>
         <div class="contact-items">
           <div class="c-item">
             <div class="c-icon">@</div>
-            <div class="c-text"><strong>Email</strong><span><a href="mailto:js-software@post.cz">js-software@post.cz</a></span></div>
+            <div class="c-text"><strong>Email</strong><span><a href="/cdn-cgi/l/email-protection#f9938ad48a969f8d8e988b9cb989968a8dd79a83"><span class="__cf_email__" data-cfemail="b8d2cb95cbd7decccfd9caddf8c8d7cbcc96dbc2">[email&#160;protected]</span></a></span></div>
           </div>
           <div class="c-item">
             <div class="c-icon">#</div>
-            <div class="c-text"><strong>Telefon</strong><span>+420 703 955 018</span></div>
+            <div class="c-text"><strong><span lang-show="cs">Telefon</span><span lang-show="en">Phone</span></strong><span>+420 703 955 018</span></div>
           </div>
           <div class="c-item">
             <div class="c-icon">→</div>
-            <div class="c-text"><strong>Sídlo</strong><span>Česká republika</span></div>
+            <div class="c-text"><strong><span lang-show="cs">Sídlo</span><span lang-show="en">Location</span></strong><span><span lang-show="cs">Česká republika</span><span lang-show="en">Czech Republic</span></span></div>
           </div>
         </div>
       </div>
@@ -1025,20 +1138,32 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
           <input type="hidden" name="_subject" id="_subject" value="Nová poptávka z webu">
           <input type="hidden" name="_replyto" id="_replyto">
           <div class="form-row">
-            <div class="fg"><label>Jméno</label><input type="text" name="jmeno" placeholder="Jan Novák" required></div>
-            <div class="fg"><label>E-mail</label><input type="email" name="email" placeholder="jan@firma.cz" required></div>
+            <div class="fg">
+              <label><span lang-show="cs">Jméno</span><span lang-show="en">Name</span></label>
+              <input type="text" name="jmeno" placeholder="Jan Novák" required>
+            </div>
+            <div class="fg">
+              <label>E-mail</label>
+              <input type="email" name="email" placeholder="jan@firma.cz" required>
+            </div>
           </div>
           <div class="fg">
-            <label>Typ projektu</label>
+            <label><span lang-show="cs">Typ projektu</span><span lang-show="en">Project Type</span></label>
             <select name="typ_projektu">
-              <option value="">Vyberte...</option>
-              <option>Nová Android aplikace</option>
-              <option>Rozšíření stávající aplikace</option>
-              <option>Konzultace</option>
+              <option value=""><span lang-show="cs">Vyberte...</span><span lang-show="en">Select...</span></option>
+              <option id="opt1"></option>
+              <option id="opt2"></option>
+              <option id="opt3"></option>
             </select>
           </div>
-          <div class="fg"><label>Zpráva</label><textarea name="zprava" placeholder="Popište váš projekt..." required></textarea></div>
-          <button type="submit" class="btn-submit">Odeslat zprávu</button>
+          <div class="fg">
+            <label><span lang-show="cs">Zpráva</span><span lang-show="en">Message</span></label>
+            <textarea name="zprava" id="msgTextarea" placeholder="Popište váš projekt..." required></textarea>
+          </div>
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <span lang-show="cs">Odeslat zprávu</span>
+            <span lang-show="en">Send Message</span>
+          </button>
         </form>
       </div>
     </div>
@@ -1050,32 +1175,107 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
   <div class="foot-logo">JS<span>-</span>Software</div>
   <small>© 2026 JS-Software. All rights reserved. &nbsp;&nbsp;<span id="visit-count" style="color:#4a5568;font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing:.05em"></span></small>
   <ul class="foot-links">
-    <li><a href="#services">Služby</a></li>
+    <li><a href="#services"><span lang-show="cs">Služby</span><span lang-show="en">Services</span></a></li>
     <li><a href="#portfolio">Portfolio</a></li>
-    <li><a href="#o-nas">O nás</a></li>
-    <li><a href="#kontakt">Kontakt</a></li>
+    <li><a href="#o-nas"><span lang-show="cs">O nás</span><span lang-show="en">About</span></a></li>
+    <li><a href="#kontakt"><span lang-show="cs">Kontakt</span><span lang-show="en">Contact</span></a></li>
   </ul>
 </footer>
 
-<div class="toast" id="toast">Zpráva odeslána! Ozveme se do 24 hodin.</div>
+<div class="toast" id="toast"></div>
 
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
-const obs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
-},{threshold:0.1});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+// ═══ LANGUAGE SYSTEM ═══
+const STRINGS = {
+  cs: {
+    opt1: 'Nová Android aplikace',
+    opt2: 'Rozšíření stávající aplikace',
+    opt3: 'Konzultace',
+    selectPlaceholder: 'Vyberte...',
+    msgPlaceholder: 'Popište váš projekt...',
+    submitBtn: 'Odeslat zprávu',
+    submitting: 'Odesílám...',
+    toastOk: '✓ Zpráva odeslána! Ozveme se do 24 hodin.',
+    toastErr: '✗ Chyba při odesílání. Zkuste to znovu.',
+    toastNet: '✗ Síťová chyba. Zkontrolujte připojení.',
+    subjectPrefix: 'Nová poptávka od ',
+  },
+  en: {
+    opt1: 'New Android App',
+    opt2: 'Existing App Extension',
+    opt3: 'Consultation',
+    selectPlaceholder: 'Select...',
+    msgPlaceholder: 'Describe your project...',
+    submitBtn: 'Send Message',
+    submitting: 'Sending...',
+    toastOk: '✓ Message sent! We\'ll get back to you within 24 hours.',
+    toastErr: '✗ Send error. Please try again.',
+    toastNet: '✗ Network error. Check your connection.',
+    subjectPrefix: 'New inquiry from ',
+  }
+};
 
+let currentLang = 'cs';
+
+function detectLang() {
+  const saved = localStorage.getItem('js-sw-lang');
+  if (saved) return saved;
+  const nav = navigator.language || navigator.userLanguage || 'cs';
+  return nav.toLowerCase().startsWith('cs') || nav.toLowerCase().startsWith('sk') ? 'cs' : 'en';
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('js-sw-lang', lang);
+  document.documentElement.lang = lang;
+
+  // Show/hide spans
+  document.querySelectorAll('[lang-show]').forEach(el => {
+    el.style.display = el.getAttribute('lang-show') === lang ? '' : 'none';
+  });
+
+  // Update buttons
+  document.getElementById('btnCS').classList.toggle('active', lang === 'cs');
+  document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+
+  // Update dynamic strings
+  const s = STRINGS[lang];
+  const sel = document.querySelector('[name="typ_projektu"]');
+  if (sel) {
+    sel.options[0].text = s.selectPlaceholder;
+    document.getElementById('opt1').text = s.opt1;
+    document.getElementById('opt2').text = s.opt2;
+    document.getElementById('opt3').text = s.opt3;
+  }
+  const ta = document.getElementById('msgTextarea');
+  if (ta) ta.placeholder = s.msgPlaceholder;
+}
+
+// Init
+setLang(detectLang());
+
+// ═══ INTERSECTION OBSERVER (reveal animations) ═══
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ═══ CONTACT FORM ═══
 document.getElementById('contactForm').addEventListener('submit', async e => {
   e.preventDefault();
   const form = e.target;
+  const s = STRINGS[currentLang];
   const jmeno = form.querySelector('[name="jmeno"]').value;
   const email = form.querySelector('[name="email"]').value;
   const typ = form.querySelector('[name="typ_projektu"]').value;
-  document.getElementById('_subject').value = 'Nová poptávka od ' + jmeno + (typ ? ' — ' + typ : '');
+  document.getElementById('_subject').value = s.subjectPrefix + jmeno + (typ ? ' — ' + typ : '');
   document.getElementById('_replyto').value = email;
-  const btn = form.querySelector('.btn-submit');
+  const btn = document.getElementById('submitBtn');
   btn.disabled = true;
-  btn.textContent = 'Odesílám...';
+  // disable btn text via hidden spans trick
+  btn.querySelectorAll('[lang-show]').forEach(el => el.style.display = 'none');
+  btn.textContent = s.submitting;
   const t = document.getElementById('toast');
   try {
     const res = await fetch(form.action, {
@@ -1084,24 +1284,29 @@ document.getElementById('contactForm').addEventListener('submit', async e => {
       headers: { 'Accept': 'application/json' }
     });
     if (res.ok) {
-      t.textContent = '✓ Zpráva odeslána! Ozveme se do 24 hodin.';
+      t.textContent = s.toastOk;
       t.style.background = '#00c896';
       form.reset();
     } else {
-      t.textContent = '✗ Chyba při odesílání. Zkuste to znovu.';
+      t.textContent = s.toastErr;
       t.style.background = '#e05555';
     }
   } catch {
-    t.textContent = '✗ Síťová chyba. Zkontrolujte připojení.';
+    t.textContent = s.toastNet;
     t.style.background = '#e05555';
   }
   t.classList.add('show');
   btn.disabled = false;
-  btn.textContent = 'Odeslat zprávu';
+  // Restore btn
+  btn.textContent = '';
+  const cs = document.createElement('span'); cs.setAttribute('lang-show','cs'); cs.textContent = STRINGS.cs.submitBtn;
+  const en = document.createElement('span'); en.setAttribute('lang-show','en'); en.textContent = STRINGS.en.submitBtn;
+  btn.appendChild(cs); btn.appendChild(en);
+  setLang(currentLang); // re-apply visibility
   setTimeout(() => { t.classList.remove('show'); t.style.background = ''; }, 4000);
 });
 
-// Nav highlight
+// ═══ NAV HIGHLIGHT ═══
 const secs = document.querySelectorAll('section[id]');
 window.addEventListener('scroll', () => {
   const y = window.scrollY + 80;
@@ -1111,24 +1316,23 @@ window.addEventListener('scroll', () => {
     const id = s.getAttribute('id');
     const link = document.querySelector('.nav-links a[href="#' + id + '"]');
     if (link) {
-      if (y >= top && y < bot) {
-        link.style.color = 'var(--accent)';
-      } else {
-        link.style.color = '';
-      }
+      link.style.color = (y >= top && y < bot) ? 'var(--accent)' : '';
     }
   });
 });
 
-// Visitor counter from GoatCounter
+// ═══ VISITOR COUNTER ═══
 const visitEl = document.getElementById('visit-count');
 if (visitEl) {
   fetch('https://pocitadlo.goatcounter.com/counter/%2Faplikace%2F.json')
     .then(r => r.json())
-    .then(d => { visitEl.textContent = (d.count && d.count !== '0') ? d.count : '1'; })
-    .catch(() => { visitEl.textContent = '1'; });
+    .then(d => {
+      if (d && d.count) {
+        visitEl.textContent = '· ' + d.count + ' ' + (currentLang === 'cs' ? 'návštěv' : 'visits');
+      }
+    })
+    .catch(() => {});
 }
 </script>
-<script data-goatcounter="https://pocitadlo.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

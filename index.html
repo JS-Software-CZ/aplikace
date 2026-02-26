@@ -1048,7 +1048,7 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
 <!-- FOOTER -->
 <footer>
   <div class="foot-logo">JS<span>-</span>Software</div>
-  <small>© 2025 JS-Software. All rights reserved.</small>
+  <small>© 2026 JS-Software. All rights reserved. &nbsp;&nbsp;<span id="visit-count" style="color:#4a5568;font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing:.05em"></span></small>
   <ul class="foot-links">
     <li><a href="#services">Služby</a></li>
     <li><a href="#portfolio">Portfolio</a></li>
@@ -1104,7 +1104,13 @@ document.getElementById('contactForm').addEventListener('submit', async e => {
   setTimeout(() => { t.classList.remove('show'); t.style.background = ''; }, 4000);
 });
 
-// Nav highlight
+// Visitor counter from GoatCounter
+fetch('https://pocitadlo.goatcounter.com/counter//count.json')
+  .then(r => r.json())
+  .then(d => {
+    document.getElementById('visit-count').textContent = Number(d.count).toLocaleString('cs-CZ');
+  })
+  .catch(() => {});
 const secs = document.querySelectorAll('section[id]');
 window.addEventListener('scroll', () => {
   const y = window.scrollY + 80;
@@ -1123,5 +1129,6 @@ window.addEventListener('scroll', () => {
   });
 });
 </script>
+<script data-goatcounter="https://pocitadlo.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

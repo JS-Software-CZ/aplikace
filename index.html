@@ -1123,7 +1123,7 @@ window.addEventListener('scroll', () => {
 // Visitor counter from GoatCounter
 const visitEl = document.getElementById('visit-count');
 if (visitEl) {
-  fetch('https://pocitadlo.goatcounter.com/counter/%2F.json')
+  fetch('https://pocitadlo.goatcounter.com/counter/%2Faplikace%2F.json')
     .then(r => r.json())
     .then(d => { visitEl.textContent = (d.count && d.count !== '0') ? d.count : '1'; })
     .catch(() => { visitEl.textContent = '1'; });

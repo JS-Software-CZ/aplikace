@@ -1008,7 +1008,7 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
         <div class="contact-items">
           <div class="c-item">
             <div class="c-icon">@</div>
-            <div class="c-text"><strong>Email</strong><span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="38524b154b575e4c4f594a5d7848574b4c165b42">[email&#160;protected]</a></span></div>
+            <div class="c-text"><strong>Email</strong><span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d9b3aaf4aab6bfadaeb8abbc99a9b6aaadf7baa3">[email&#160;protected]</a></span></div>
           </div>
           <div class="c-item">
             <div class="c-icon">#</div>
@@ -1095,8 +1095,23 @@ document.getElementById('contactForm').addEventListener('submit', async e => {
 });
 
 // Nav highlight
-const secs=document.querySelectorAll('section[id]');
-window.addEventListener('scroll',()=>{
-  const y=window.scrollY+80;
-  secs.forEach(s=>{
-    cons
+const secs = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY + 80;
+  secs.forEach(s => {
+    const top = s.offsetTop;
+    const bot = top + s.offsetHeight;
+    const id = s.getAttribute('id');
+    const link = document.querySelector('.nav-links a[href="#' + id + '"]');
+    if (link) {
+      if (y >= top && y < bot) {
+        link.style.color = 'var(--accent)';
+      } else {
+        link.style.color = '';
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1105,10 +1105,10 @@ document.getElementById('contactForm').addEventListener('submit', async e => {
 });
 
 // Visitor counter from GoatCounter
-fetch('https://pocitadlo.goatcounter.com/counter//count.json')
+fetch('https://pocitadlo.goatcounter.com/counter/%2F.json')
   .then(r => r.json())
   .then(d => {
-    document.getElementById('visit-count').textContent = Number(d.count).toLocaleString('cs-CZ');
+    if (d.count) document.getElementById('visit-count').textContent = d.count;
   })
   .catch(() => {});
 const secs = document.querySelectorAll('section[id]');

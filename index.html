@@ -1008,7 +1008,7 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
         <div class="contact-items">
           <div class="c-item">
             <div class="c-icon">@</div>
-            <div class="c-text"><strong>Email</strong><span><a href="/cdn-cgi/l/email-protection#6b01184618040d1f1c0a190e2b1b04181f450811"><span class="__cf_email__" data-cfemail="7218015f011d14060513001732021d01065c1108">[email&#160;protected]</span></a></span></div>
+            <div class="c-text"><strong>Email</strong><span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6d071e401e020b191a0c1f082d1d021e19430e17">[email&#160;protected]</a></span></div>
           </div>
           <div class="c-item">
             <div class="c-icon">#</div>
@@ -1059,7 +1059,7 @@ footer small { color:var(--muted);font-size:.8rem;font-family:var(--mono); }
 
 <div class="toast" id="toast">Zpráva odeslána! Ozveme se do 24 hodin.</div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const obs = new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});
 },{threshold:0.1});
@@ -1068,14 +1068,11 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 document.getElementById('contactForm').addEventListener('submit', async e => {
   e.preventDefault();
   const form = e.target;
-
-  // Dynamicky nastav předmět a reply-to
   const jmeno = form.querySelector('[name="jmeno"]').value;
   const email = form.querySelector('[name="email"]').value;
   const typ = form.querySelector('[name="typ_projektu"]').value;
   document.getElementById('_subject').value = 'Nová poptávka od ' + jmeno + (typ ? ' — ' + typ : '');
   document.getElementById('_replyto').value = email;
-
   const btn = form.querySelector('.btn-submit');
   btn.disabled = true;
   btn.textContent = 'Odesílám...';
@@ -1104,16 +1101,7 @@ document.getElementById('contactForm').addEventListener('submit', async e => {
   setTimeout(() => { t.classList.remove('show'); t.style.background = ''; }, 4000);
 });
 
-// Visitor counter from GoatCounter
-fetch('https://pocitadlo.goatcounter.com/counter/%2F.json')
-  .then(r => r.json())
-  .then(d => {
-    const el = document.getElementById('visit-count');
-    el.textContent = (d.count && d.count !== '0') ? d.count : '1';
-  })
-  .catch(() => {
-    document.getElementById('visit-count').textContent = '1';
-  });
+// Nav highlight
 const secs = document.querySelectorAll('section[id]');
 window.addEventListener('scroll', () => {
   const y = window.scrollY + 80;
@@ -1124,4 +1112,23 @@ window.addEventListener('scroll', () => {
     const link = document.querySelector('.nav-links a[href="#' + id + '"]');
     if (link) {
       if (y >= top && y < bot) {
-      
+        link.style.color = 'var(--accent)';
+      } else {
+        link.style.color = '';
+      }
+    }
+  });
+});
+
+// Visitor counter
+const visitEl = document.getElementById('visit-count');
+if (visitEl) {
+  fetch('https://pocitadlo.goatcounter.com/counter/%2F.json')
+    .then(r => r.json())
+    .then(d => { visitEl.textContent = (d.count && d.count !== '0') ? d.count : '1'; })
+    .catch(() => { visitEl.textContent = '1'; });
+}
+</script>
+<script data-goatcounter="https://pocitadlo.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
